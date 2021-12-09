@@ -27,12 +27,16 @@ export default {
       headerContent: 'T E S T',
       menuConfig: [
         {menuName: '1', menuRouteName: 'page1'},
+        {menuName: '2', menuRouteName: 'page2'},
+        {menuName: '3', menuRouteName: 'page3'},
       ]
     }
   },
   methods: {
     handleMenuClick(e, menuRouteName) {
-      this.$router.push(menuRouteName)
+        if(this.$route.path.includes(menuRouteName)) return
+        this.$router.push(menuRouteName)
+
     }
   }
 }
