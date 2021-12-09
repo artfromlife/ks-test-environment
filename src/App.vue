@@ -1,32 +1,56 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <el-container>
+    <el-aside>
+      <el-menu>
+        <el-menu-item v-for="{ menuName ,menuRouteName} in menuConfig" :key="menuRouteName"
+                      @click="e=>handleMenuClick(e,menuRouteName)">{{ menuName }}
+        </el-menu-item>
+      </el-menu>
+    </el-aside>
+    <el-container>
+      <el-header>
+        {{headerContent}}
+      </el-header>
+      <el-main>
+        <transition>
+          <router-view/>
+        </transition>
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+<script>
+export default {
+  data() {
+    return {
+      headerContent: 'T E S T',
+      menuConfig: [
+        {menuName: '1', menuRouteName: 'page1'},
+      ]
+    }
+  },
+  methods: {
+    handleMenuClick(e, menuRouteName) {
+      this.$router.push(menuRouteName)
     }
   }
+}
+</script>
+<style lang="scss" scoped>
+.el-container {
+  height: 100%;
+}
+
+.el-menu {
+  height: 100%;
+  background-image: linear-gradient(#FEAC5E, #C779D0, #4BC0C8);
+}
+.el-header{
+  background-image: linear-gradient(to right,#FEAC5E, #C779D0, #4BC0C8);
+}
+.el-main {
+  background-color: #bdc3c7;
+  background-image:  linear-gradient(#ffffff,#bdc3c7) ;
 }
 </style>
