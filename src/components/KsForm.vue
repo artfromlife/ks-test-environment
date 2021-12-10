@@ -1,7 +1,7 @@
 <template>
   <el-form v-bind="$attrs">
-    <el-form-item v-for="{ prop, label, componentName, isSlot ,dict} in formConfig" :key="prop" :prop="prop" :label="label">
-      <slot :name="componentName" v-if="isSlot" :dict="dict"></slot>
+    <el-form-item v-for="{ prop, label, componentName, isSlot } in formConfig" :key="prop" :prop="prop" :label="label">
+      <slot :name="componentName" v-if="isSlot"></slot>
       <component :is="componentName" v-model="$attrs.model[prop]" v-else></component>
     </el-form-item>
   </el-form>

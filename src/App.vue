@@ -29,6 +29,7 @@ export default {
         {menuName: '1', menuRouteName: 'page1'},
         {menuName: '2', menuRouteName: 'page2'},
         {menuName: '3', menuRouteName: 'page3'},
+        {menuName: '4', menuRouteName: 'page4'},
       ]
     }
   },
