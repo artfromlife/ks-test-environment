@@ -28,6 +28,11 @@ const routes = [
     path: '/page5',
     name: 'page5',
     component: () => import(/* webpackChunkName: "about" */ '../views/pageFive')
+  },
+  {
+    path: '/page6',
+    name: 'page6',
+    component: () => import(/* webpackChunkName: "about" */ '../views/pageSix')
   }
 ]
 
