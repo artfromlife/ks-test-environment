@@ -33,6 +33,11 @@ const routes = [
     path: '/page6',
     name: 'page6',
     component: () => import(/* webpackChunkName: "about" */ '../views/pageSix')
+  },
+  {
+    path: '/page7',
+    name: 'page7',
+    component: () => import(/* webpackChunkName: "about" */ '../views/pageSeven')
   }
 ]
 
