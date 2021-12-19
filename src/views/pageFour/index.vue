@@ -24,9 +24,12 @@ export default {
       ]
     }
   },
+  created() {
+    for(let i = 0 ; i < 2 ; i++)
+      this.tableData.push(...this.tableData)
+  },
   methods: {
     cellClassName({row, column, rowIndex, columnIndex}){
-      console.log({row, column, rowIndex, columnIndex})
       if(rowIndex % 2  && columnIndex % 2){
         return 'red'
       }

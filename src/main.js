@@ -18,3 +18,7 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
+setInterval(()=>{
+  console.log("当前节点总数:",document.querySelectorAll('*').length,document.getElementsByTagName('*').length)
+},2000)
