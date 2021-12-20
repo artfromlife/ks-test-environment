@@ -1,10 +1,15 @@
 <template>
-  <div v-color:blue>
-    <label for="input" style="display:inline-block ; margin: 50px auto">
-      <el-button @click="isChange = !isChange">isChange</el-button>
-    </label>
-    <el-input id="input" size="mini" v-change:ymm.self="isChange" v-model="input"></el-input>
-  </div>
+ <div class="table-container">
+   <el-table
+       :data="tableData"
+       border
+       :cell-class-name="cellClassName"
+   >
+     <el-table-column prop="name" label="名字"></el-table-column>
+     <el-table-column prop="age" label="年龄"></el-table-column>
+     <el-table-column prop="sex" label="性别"></el-table-column>
+   </el-table>
+ </div>
 </template>
 
 <script>
@@ -12,51 +17,34 @@ export default {
   name: 'pageFour',
   data() {
     return {
-      input:null,
-      isChange:false,
-    }
-  },
-  directives: {
-    color:{
-      bind(el,binding){
-        el.style.backgroundColor = binding.arg
-      }
-    },
-    change: {
-      bind(el) {
-        el.querySelector('input').focus()
-        console.log('binding')
-      },
-      inserted(el, binding, vNode) {
-        console.log('inserted',binding)
-      },
-      update(el, binding, vNode) {
-        console.log('update',binding)
-      },
-      componentUpdated() {
-        console.log('componentUpdated')
-      },
-      unbind() {
-        console.log('unbinding')
-      }
+      tableData:[
+        { name : 'Michael' , age : 23, sex:'male' },
+        { name : 'Jane' , age : 22 , sex:'female'},
+        { name : 'KangKang' , age : 21 , sex:'male'},
+      ]
     }
   },
   created() {
-    console.log('created')
+    for(let i = 0 ; i < 2 ; i++)
+      this.tableData.push(...this.tableData)
   },
-  beforeMount() {
-    console.log('beforeMount')
-  },
-  mounted() {
-    console.log('mounted')
-  },
-  methods: {}
+  methods: {
+    cellClassName({row, column, rowIndex, columnIndex}){
+      if(rowIndex % 2  && columnIndex % 2){
+        return 'red'
+      }
+
+    }
+  }
 }
 </script>
 
 <style lang="scss">
-
-.red {
+.table-container{
+  width: 30%;
+  margin: 50px auto;
+}
+.red{
   color: red;
 }
 </style>
