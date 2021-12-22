@@ -10,6 +10,9 @@ import Child from "@/views/pageSeven/Child";
 export default {
   name: 'pageSeven',
   components: {Child},
+  created() {
+    console.log(this.$props === this.$options.propsData)
+  },
   data() {
     return {
       item:{
