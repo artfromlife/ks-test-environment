@@ -1,7 +1,3 @@
-<template>
-  <div>{{`${A}-${B}-${C}`}}</div>
-</template>
-
 <script>
 export default {
   name: 'Child',
@@ -13,9 +9,9 @@ export default {
   data() {
     return {}
   },
+  render(createElement, context) {
+  },
   methods: {}
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
