@@ -1,21 +1,26 @@
 <template>
-  <div>
-    <div>pageSeven</div>
-    <child></child>
+  <div class="center">
+    <amount-input v-model="input" :decimal="2"></amount-input>
   </div>
 </template>
 
 <script>
-import Child from "@/views/pageSeven/Child";
+import AmountInput from "./AmountInput";
 export default {
-  name: 'pageSeven',
-  components: {Child},
-  data() {
-    return {}
+  components: {AmountInput},
+  data(){
+    return {
+      input:null
+    }
   },
-  methods: {}
 }
 </script>
-
 <style lang="scss" scoped>
+.center{
+  width: 50%;
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>

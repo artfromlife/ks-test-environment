@@ -1,14 +1,12 @@
 <template>
   <div>
-    <base-input type="password"></base-input>
+    pageSix
   </div>
 </template>
 
 <script>
-import BaseInput from "@/views/pageSix/base-input";
 export default {
   name: 'pageSix',
-  components: {BaseInput},
   data() {
     return {}
   },
