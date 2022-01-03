@@ -13,12 +13,17 @@
         lastValue:null,
       }
     },
+    computed:{
+      regExp(){
+        return new RegExp(`^\\D*(\\d*(?:\\.\\d{0,${this.decimal}})?).*$`,'g')
+      }
+    },
     mounted() {
       this.$refs.amountInput.$el.querySelector('.el-input__inner').style.textAlign = 'right'
     },
     methods:{
       handleInput(val){
-        this.lastValue = val.replace(/[^\d.]/g,'')
+        this.lastValue = val.replace(this.regExp, '$1').replace(/^0+/,'0')
       },
       inputBlur(){
         this.$emit('input',this.lastValue)
