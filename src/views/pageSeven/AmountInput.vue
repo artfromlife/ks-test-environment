@@ -9,6 +9,14 @@
         default:2
       }
     },
+    watch:{
+      value:{
+        handler(n){
+          this.lastValue = this.decimalFormatter(n)
+        },
+        immediate:true
+      }
+    },
     data(){
       return {
         lastValue:null,
@@ -23,15 +31,20 @@
       this.$refs.amountInput.$el.querySelector('.el-input__inner').style.textAlign = 'right'
     },
     methods: {
+      decimalFormatter(strOrNum){
+        if(["number","string"].includes(typeof strOrNum)){
+          return Number(strOrNum).toLocaleString("zH", {
+            minimumFractionDigits: this.decimal,
+            maximumFractionDigits: this.decimal
+          })
+        }else return strOrNum
+      },
       handleInput(val) {
         this.lastValue = val.replace(this.regExp, '$1').replace(/^0+/, '0')
       },
       inputBlur() {
-        this.$emit('input', this.lastValue)
-        this.lastValue = Number(this.lastValue).toLocaleString("zH", {
-          minimumFractionDigits: this.decimal,
-          maximumFractionDigits: this.decimal
-        })
+        this.$emit('input', Number(this.lastValue))
+        this.lastValue = this.decimalFormatter(this.lastValue)
       },
       inputFocus() {
         if ("string" === typeof this.lastValue)

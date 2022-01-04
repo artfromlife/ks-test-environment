@@ -1,6 +1,9 @@
 <template>
   <div class="center">
     <amount-input v-model="input" :decimal="8" placeholder="请输入" >
+      <template slot="append">
+        <el-button @click="handleClick">+</el-button>
+      </template>
     </amount-input>
   </div>
 </template>
@@ -9,11 +12,17 @@
 import AmountInput from "./AmountInput";
 export default {
   components: {AmountInput},
-  data(){
+  data() {
     return {
-      input:null
+      input: null
     }
   },
+  methods: {
+    handleClick() {
+      this.input += 0.1
+    }
+
+  }
 }
 </script>
 <style lang="scss" scoped>
