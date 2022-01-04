@@ -13,34 +13,41 @@
         lastValue:null,
       }
     },
-    computed:{
-      regExp(){
-        return new RegExp(`^\\D*(\\d*(?:\\.\\d{0,${this.decimal}})?).*$`,'g')
+    computed: {
+      regExp() {
+        return new RegExp(`^\\D*(\\d*(?:\\.\\d{0,${this.decimal}})?).*$`, 'g')
       }
     },
     mounted() {
       this.$refs.amountInput.$el.querySelector('.el-input__inner').style.textAlign = 'right'
     },
-    render(){
-      const that = this
+    methods: {
+      handleInput(val) {
+        this.lastValue = val.replace(this.regExp, '$1').replace(/^0+/, '0')
+      },
+      inputBlur() {
+        this.$emit('input', this.lastValue)
+        this.lastValue = Number(this.lastValue).toLocaleString("zH", {
+          minimumFractionDigits: this.decimal,
+          maximumFractionDigits: this.decimal
+        })
+      },
+      inputFocus() {
+        if ("string" === typeof this.lastValue)
+          this.lastValue = this.lastValue.replace(/,/g, '')
+      }
+    },
+    render() {
       const props = {...this.$props, ...this.$attrs, value: this.lastValue}
       const scopedSlots = {...this.$scopedSlots}
       const on = {
         ...this.$listeners,
-        input(val) {
-          that.lastValue = val.replace(that.regExp, '$1').replace(/^0+/, '0')
-        },
-        blur() {
-          that.$emit('input', that.lastValue)
-          that.lastValue = Number(that.lastValue).toLocaleString("zH", {minimumFractionDigits: that.decimal, maximumFractionDigits: that.decimal})
-        },
-        focus() {
-          if ("string" === typeof that.lastValue)
-            that.lastValue = that.lastValue.replace(/,/g, '')
-        }
+        input: this.handleInput.bind(this),
+        blur: this.inputBlur.bind(this),
+        focus: this.inputFocus.bind(this)
       }
       return (
-          <el-input ref="amountInput" {...{ props, scopedSlots:this.$slots, on }}  />
+          <el-input ref="amountInput" {...{props, scopedSlots, on}}  />
       )
     }
   }
