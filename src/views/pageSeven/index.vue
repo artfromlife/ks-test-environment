@@ -1,9 +1,9 @@
 <template>
   <div class="center">
     <amount-input v-model="input" :decimal="8" placeholder="请输入" >
-      <template slot="append">
-        <el-button @click="handleClick">+</el-button>
-      </template>
+        <el-button slot="append" @click="handleClick">+</el-button>
+        <el-button slot="prefix" @click="input-=0.1">-</el-button>
+
     </amount-input>
   </div>
 </template>
