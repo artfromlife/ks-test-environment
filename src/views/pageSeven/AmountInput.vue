@@ -21,28 +21,26 @@
     mounted() {
       this.$refs.amountInput.$el.querySelector('.el-input__inner').style.textAlign = 'right'
     },
-    methods:{
-      handleInput(val){
-        this.lastValue = val.replace(this.regExp, '$1').replace(/^0+/,'0')
-      },
-      inputBlur(){
-        this.$emit('input',this.lastValue)
-        this.lastValue = Number(this.lastValue).toLocaleString("zH", {minimumFractionDigits: this.decimal,maximumFractionDigits:this.decimal})
-      },
-      inputFocus(){
-        if("string" === typeof this.lastValue)
-          this.lastValue = this.lastValue.replace(/,/g,'')
-      }
-    },
     render(){
-      return(
-        <el-input
-          ref="amountInput"
-          value={this.lastValue}
-          onInput={this.handleInput}
-          onBlur={this.inputBlur}
-          onFocus={this.inputFocus}
-        />
+      const that = this
+      const props = {...this.$props, ...this.$attrs, value: this.lastValue}
+      const scopedSlots = {...this.$scopedSlots}
+      const on = {
+        ...this.$listeners,
+        input(val) {
+          that.lastValue = val.replace(that.regExp, '$1').replace(/^0+/, '0')
+        },
+        blur() {
+          that.$emit('input', that.lastValue)
+          that.lastValue = Number(that.lastValue).toLocaleString("zH", {minimumFractionDigits: that.decimal, maximumFractionDigits: that.decimal})
+        },
+        focus() {
+          if ("string" === typeof that.lastValue)
+            that.lastValue = that.lastValue.replace(/,/g, '')
+        }
+      }
+      return (
+          <el-input ref="amountInput" {...{ props, scopedSlots:this.$slots, on }}  />
       )
     }
   }

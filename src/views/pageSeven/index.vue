@@ -1,6 +1,8 @@
 <template>
   <div class="center">
-    <amount-input v-model="input" :decimal="2"></amount-input>
+    <amount-input v-model="input" :decimal="8" placeholder="请输入"  >
+      <slot name="prefix">'嘻嘻'</slot>
+    </amount-input>
   </div>
 </template>
 
