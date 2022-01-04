@@ -1,6 +1,7 @@
 <script>
   export default {
     name: 'AmountInput',
+    inheritAttrs:false,
     props:{
       value:[String,Number],
       decimal:{
@@ -37,9 +38,9 @@
           this.lastValue = this.lastValue.replace(/,/g, '')
       }
     },
-    render() {
-      const props = {...this.$props, ...this.$attrs, value: this.lastValue}
-      const scopedSlots = {...this.$scopedSlots}
+    render(h) {
+      const props = {...this.$props, value: this.lastValue}
+      const attrs = {...this.$attrs}
       const on = {
         ...this.$listeners,
         input: this.handleInput.bind(this),
@@ -47,7 +48,11 @@
         focus: this.inputFocus.bind(this)
       }
       return (
-          <el-input ref="amountInput" {...{props, scopedSlots, on}}  />
+          <el-input ref="amountInput" {...{ props, attrs, on}}  >
+            {
+              Object.entries(this.$slots).map(slot =><template slot={slot[0]}>{h('slot',{name:slot[0]},slot[1])}</template> )
+            }
+          </el-input>
       )
     }
   }
