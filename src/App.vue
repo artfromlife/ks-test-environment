@@ -33,6 +33,7 @@ export default {
         {menuName: '5', menuRouteName: 'page5'},
         {menuName: '6', menuRouteName: 'page6'},
         {menuName: '7', menuRouteName: 'page7'},
+        {menuName: '8', menuRouteName: 'page8'},
       ]
     }
   },
