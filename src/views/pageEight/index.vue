@@ -1,20 +1,36 @@
 <template>
-  <el-input @click.native="handleInputClick" v-model="inputValue"></el-input>
+  <div>
+    template
+    <Child @change="handleClick"></Child>
+  </div>
 </template>
 
 <script>
+const Child = {
+  created() {
+    this.$on('change',()=>{
+      console.log('child handler')
+    })
+  },
+  mounted() {
+    this.$emit('change')
+  },
+  render(h){
+    return h('div')
+  }
+}
 export default {
   name: '',
-  components: {},
+  components: {Child},
   props: {},
   data() {
-  return {
-    inputValue:null
-  }
+  return {}
   },
   computed: {},
   watch: {},
-  created() {},
+  created() {
+
+  },
   mounted() {},
   updated() {},
   activated() {},
@@ -22,8 +38,12 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
-    handleInputClick (e) {
-      console.log(e.target.value)
+    handleClick(){
+      console.log('father handler')
+      let t = new Date().getTime()
+      while (Date.now() < t+2000){
+        ;
+      }
     }
   }
 }
