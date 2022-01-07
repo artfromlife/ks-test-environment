@@ -1,12 +1,13 @@
 <template>
-    <base-input type="button"></base-input>
+  <label>
+    <input v-bind="$attrs"></input>
+  </label>
 </template>
 
 <script>
-import BaseInput from "./BaseInput";
 export default {
-  name: 'pageEight',
-  components: {BaseInput},
+  name: 'BaseInput',
+  components: {},
   props: {},
   data() {
   return {}
@@ -29,4 +30,3 @@ export default {
 <style lang='scss' scoped>
 
 </style>
-`
