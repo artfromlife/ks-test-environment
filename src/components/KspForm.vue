@@ -7,11 +7,11 @@
   >
     <slot>
       <el-row :gutter="gutter">
-        <el-col :span="span" v-for="cfg in formConfig" :key="cfg.prop">
-          <slot :name="cfg.slot" :model="model">
+        <el-col :span="cfg.span||12" v-for="cfg in formConfig" :key="cfg.prop">
+          <slot :name="cfg.slot" :model="model" v-if="!cfg.hidden">
             <el-form-item :label="cfg.label" :prop="cfg.prop">
               <slot :name="cfg.prop" :model="model">
-                <component :is="cfg.type || 'warn'" v-bind="cfg" v-on="cfg.listeners" v-model="model[cfg.prop]">
+                <component :is="cfg.type || 'warn'" v-bind="cfg" v-on="cfg.listeners" v-model="model[cfg.prop]" clearable >
                   <el-option
                     v-for="option in cfg.options"
                     :key="option.value"
@@ -44,9 +44,34 @@ export default {
       type: Number,
       default: 10
     },
-    span: {
-      type: Number,
-      default: 12
+    /**
+     * subscriberMapper :
+     *    {
+     *      subscriber : {  publisher:[] }
+     *    }
+     * publisherMapper:
+     *    {
+     *      publisher: ['subscriber1','subscriber2]
+     *    }
+     * formConfigMapper:
+     *    {
+     *      subscriber : formConfigItem
+     *    }
+     *
+     */
+    watcherCallback:{
+      type:Function,
+      default:function (subscriberMapper,publisherMapper,formConfigMapper,publisher){
+        const subscribers = publisherMapper[publisher]
+        subscribers.forEach(subscriber => {
+          if(subscriberMapper[subscriber][publisher].includes(this.model[publisher])){
+            formConfigMapper[subscriber].hidden = false
+          }else {
+            formConfigMapper[subscriber].hidden = true
+          }
+          this.$set(this.model,subscriber,null)
+        })
+      }
     }
   },
   data() {
@@ -55,10 +80,16 @@ export default {
   computed: {
     computedLabelWidth() {
       return Math.max(...this.formConfig.map(c => c.label.length)) * 18 + 'px'
+    },
+    formConfigMapper() {
+      const Mapper = {}
+      this.formConfig.forEach( c => Mapper[c.prop] = c)
+      return Mapper
     }
   },
   watch: {},
   created() {
+    this.dealFilters();
   },
   mounted() {
   },
@@ -69,10 +100,45 @@ export default {
   deactivated() {
   },
   beforeDestroy() {
+    this.$off()
   },
   destroyed() {
   },
-  methods: {}
+  methods: {
+    dealFilters() {
+      const subscriberMapper = {}
+      let dependencies = []
+      this.formConfig.forEach(c => {
+        if(c.filter){
+          subscriberMapper[c.prop] = c.filter
+          dependencies.push(...Object.keys(c.filter))
+        }
+      })
+
+      dependencies = [...new Set(dependencies)]
+      const publisherMapper = {}
+      dependencies.forEach(publisher => {
+        const subscribers = []
+        Object.keys(subscriberMapper).forEach( subscriber => {
+          if(Object.keys(subscriberMapper[subscriber]).includes(publisher)){
+            subscribers.push(subscriber)
+          }
+        })
+        publisherMapper[publisher] = subscribers
+        const formConfigMapper = this.formConfigMapper
+        this.$watch(
+            `model.${publisher}`,
+            this.watcherCallback.bind(this,subscriberMapper,publisherMapper,formConfigMapper,publisher),
+            {
+              immediate:true,
+              deep:Array.isArray(this.model[publisher])
+            }
+        )
+      })
+
+    },
+
+  }
 }
 </script>
 

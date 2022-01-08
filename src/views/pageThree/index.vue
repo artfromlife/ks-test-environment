@@ -2,17 +2,22 @@
   <div>
     <el-button @click="visible = true">{{visible}}</el-button>
 
-    <ks-dialog :visible.sync="visible" :button-config="buttonConfig">
-      <ksp-form :form-config="formConfig" :model="formData" @innerInput="handleInput">
+    <ks-dialog
+        :visible.sync="visible"
+        v-if="visible"
+        :button-config="buttonConfig"
+        @close="formData={}">
+
+      <ksp-form
+          :form-config="formConfig"
+          :model="formData"
+          :watcher-callback="watcherCallback"
+      >
         <template #age="slotProps">
           <el-input v-model="slotProps.model.age"/>
         </template>
-        <template #age="slotProps">
-          <el-form-item label="年龄">
-            <el-input v-model="slotProps.model.age"/>
-          </el-form-item>
-        </template>
       </ksp-form>
+
     </ks-dialog>
   </div>
 </template>
@@ -36,11 +41,14 @@ export default {
             }
           },
           {
-            label:'年龄',slot:'age'
+            label:'年龄',prop:'age'
 
           },
           {
-            label:'学校',prop:'school',type:'el-input',
+            label:'学校',prop:'school',type:'el-input',span:24,
+            filter: {
+              profession:['2']
+            },
             listeners: {
               input:this.handleInput,
               focus:this.handleFocus
@@ -54,11 +62,29 @@ export default {
               ]
           },
           {
-            label:'性别',prop:'sex',type:'el-select',
+            label: '是否是人',prop:'yesOrNo',type: 'el-select',
+            filter:{
+              profession:['2']
+            },
+            options: [
+              {label:'是',value:'1'},
+              {label:'否',value:'2'},
+            ]
+          },
+          {
+            label:'性别',prop:'sex',type:'el-select',hidden:true,
+            filter:{
+              yesOrNo:['1']
+            },
             options: [
                   {label:'男',value:'1'},
                   {label:'女',value:'2'},
-                ]},
+                ]
+          },
+          {
+            label: '是否',prop:'switch',type: 'el-switch'
+          },
+
         ],
     buttonConfig:
         [
@@ -84,6 +110,16 @@ export default {
     },
     handleFocus(){
       console.log('focus')
+    },
+    watcherCallback(subscriberMapper,publisherMapper,formConfigMapper,publisher) {
+      const subscribers = publisherMapper[publisher]
+      subscribers.forEach(subscriber => {
+        if (subscriberMapper[subscriber][publisher].includes(this.formData[publisher])) {
+          formConfigMapper[subscriber].hidden = false
+        } else {
+          formConfigMapper[subscriber].hidden = true
+        }
+      })
     }
   }
 }
