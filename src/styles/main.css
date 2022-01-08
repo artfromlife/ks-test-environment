@@ -1,0 +1,6 @@
+/**
+ fix the length of el-select is not equal with el-input in el-form
+ */
+.el-form-item .el-select {
+    width: 100%;
+}
