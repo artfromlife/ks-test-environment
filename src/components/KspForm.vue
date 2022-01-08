@@ -7,22 +7,29 @@
   >
     <slot>
       <el-row :gutter="gutter">
-        <el-col :span="cfg.span||12" v-for="cfg in formConfig" :key="cfg.prop">
-          <slot :name="cfg.slot" :model="model" v-if="!cfg.hidden">
-            <el-form-item :label="cfg.label" :prop="cfg.prop">
-              <slot :name="cfg.prop" :model="model">
-                <component :is="cfg.type || 'warn'" v-bind="cfg" v-on="cfg.listeners" v-model="model[cfg.prop]" clearable >
-                  <el-option
-                    v-for="option in cfg.options"
-                    :key="option.value"
-                    :value="option.value"
-                    :label="option.label"
-                  />
-                </component>
-              </slot>
-            </el-form-item>
-          </slot>
-        </el-col>
+        <transition-group name="list-complete" tag="div">
+          <el-col :span="cfg.span||12" v-for="cfg in formConfig" :key="cfg.prop" class="list-complete-item">
+            <slot :name="cfg.slot" :model="model" v-if="!cfg.hidden">
+              <el-form-item :label="cfg.label" :prop="cfg.prop">
+                <slot :name="cfg.prop" :model="model">
+                  <component
+                      :is="cfg.type || 'warn'"
+                      v-bind="cfg"
+                      v-on="cfg.listeners"
+                      v-model="model[cfg.prop]"
+                      clearable>
+                    <el-option
+                        v-for="option in cfg.options"
+                        :key="option.value"
+                        :value="option.value"
+                        :label="option.label"
+                    />
+                  </component>
+                </slot>
+              </el-form-item>
+            </slot>
+          </el-col>
+        </transition-group>
       </el-row>
     </slot>
   </el-form>

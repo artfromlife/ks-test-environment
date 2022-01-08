@@ -46,9 +46,6 @@ export default {
           },
           {
             label:'学校',prop:'school',type:'el-input',span:24,
-            filter: {
-              profession:['2']
-            },
             listeners: {
               input:this.handleInput,
               focus:this.handleFocus
@@ -119,6 +116,7 @@ export default {
         } else {
           formConfigMapper[subscriber].hidden = true
         }
+        this.$set(this.formData,subscriber,null)
       })
     }
   }
