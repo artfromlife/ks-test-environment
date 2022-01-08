@@ -1,6 +1,6 @@
 <template>
   <el-form
-      label-position="top"
+      label-position="left"
       :label-width="computedLabelWidth"
       v-bind="{...$props,...$attrs}"
       v-on="$listeners"
@@ -69,14 +69,55 @@ export default {
     watcherCallback:{
       type:Function,
       default:function (subscriberMapper,publisherMapper,formConfigMapper,publisher){
+        const clearField = (subscriber) => this.$set(this.model, subscriber, null)
         const subscribers = publisherMapper[publisher]
+        // 一个发布者的值变化了, 引发其订阅者们的变动
         subscribers.forEach(subscriber => {
-          if(subscriberMapper[subscriber][publisher].includes(this.model[publisher])){
-            formConfigMapper[subscriber].hidden = false
-          }else {
-            formConfigMapper[subscriber].hidden = true
+          // 每个 订阅者 是否 要变动 取决于 他的 所有订阅者 和 他的 订阅模式
+          // 读取订阅模式
+          let filterMode = formConfigMapper[subscriber].filterMode
+          // 默认是全部订阅 , 即所有发布者的条件 都满足 再进行显示
+          if (!filterMode) {
+            formConfigMapper[subscriber].filterMode = 'AND'
+            filterMode = 'AND'
           }
-          this.$set(this.model,subscriber,null)
+          const publisherMapperOfSubscriber = subscriberMapper[subscriber]
+          if (filterMode === 'AND') {
+            // 是一个 AND 的关系
+            const isAllPublishersSatisfied = Object.keys(publisherMapperOfSubscriber).every(k =>
+                publisherMapperOfSubscriber[k].includes(this.model[k])
+            )
+            if (isAllPublishersSatisfied) {
+              formConfigMapper[subscriber].hidden === true && clearField(subscriber)
+              formConfigMapper[subscriber].hidden = false
+            } else {
+              formConfigMapper[subscriber].hidden === false && clearField(subscriber)
+              formConfigMapper[subscriber].hidden = true
+            }
+          } else if (filterMode === 'OR') {
+            // 是一个 OR 的关系
+            const isSomePublishersSatisfied = Object.keys(publisherMapperOfSubscriber).some(k =>
+                publisherMapperOfSubscriber[k].includes(this.model[k])
+            )
+            if (isSomePublishersSatisfied) {
+              formConfigMapper[subscriber].hidden === true && clearField(subscriber)
+              formConfigMapper[subscriber].hidden = false
+            } else {
+              formConfigMapper[subscriber].hidden === false && clearField(subscriber)
+              formConfigMapper[subscriber].hidden = true
+            }
+
+          } else if (filterMode === 'XOR') {
+            // 最近的一个变化的 publisher 来控制 ,BUG -> FEATURE
+            const isTheLastPublisherSatisfied = publisherMapperOfSubscriber[publisher].includes(this.model[publisher])
+            if (isTheLastPublisherSatisfied) {
+              formConfigMapper[subscriber].hidden === true && clearField(subscriber)
+              formConfigMapper[subscriber].hidden = false
+            } else {
+              formConfigMapper[subscriber].hidden === false && clearField(subscriber)
+              formConfigMapper[subscriber].hidden = true
+            }
+          }
         })
       }
     }

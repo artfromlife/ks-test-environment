@@ -11,7 +11,6 @@
       <ksp-form
           :form-config="formConfig"
           :model="formData"
-          :watcher-callback="watcherCallback"
       >
         <template #age="slotProps">
           <el-input v-model="slotProps.model.age"/>
@@ -45,7 +44,11 @@ export default {
 
           },
           {
-            label:'学校',prop:'school',type:'el-input',span:24,
+            label:'学校',prop:'school',type:'el-input',span:24,filterMode:'OR',
+            filter:{
+              profession:['2'],
+              yesOrNo:['1']
+            },
             listeners: {
               input:this.handleInput,
               focus:this.handleFocus
@@ -60,16 +63,16 @@ export default {
           },
           {
             label: '是否是人',prop:'yesOrNo',type: 'el-select',
-            filter:{
+           /* filter:{
               profession:['2']
-            },
+            },*/
             options: [
               {label:'是',value:'1'},
               {label:'否',value:'2'},
             ]
           },
           {
-            label:'性别',prop:'sex',type:'el-select',hidden:true,
+            label:'性别',prop:'sex',type:'el-select',
             filter:{
               yesOrNo:['1']
             },
@@ -108,17 +111,6 @@ export default {
     handleFocus(){
       console.log('focus')
     },
-    watcherCallback(subscriberMapper,publisherMapper,formConfigMapper,publisher) {
-      const subscribers = publisherMapper[publisher]
-      subscribers.forEach(subscriber => {
-        if (subscriberMapper[subscriber][publisher].includes(this.formData[publisher])) {
-          formConfigMapper[subscriber].hidden = false
-        } else {
-          formConfigMapper[subscriber].hidden = true
-        }
-        this.$set(this.formData,subscriber,null)
-      })
-    }
   }
 }
 </script>
