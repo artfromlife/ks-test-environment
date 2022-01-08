@@ -1,30 +1,59 @@
 <template>
   <div>
-    <ks-form :model="formData" :form-config="formConfig">
-      <slot slot="table">
-        {{`I am table`}}
-      </slot>
-    </ks-form>
+    <el-button @click="visible = true">{{visible}}</el-button>
+
+    <ks-dialog :visible.sync="visible" :button-config="buttonConfig">
+      <ks-form :form-config="formConfig" :model="formData">
+        <el-input slot="avv"></el-input>
+      </ks-form>
+    </ks-dialog>
   </div>
 </template>
 
 <script>
-import KsForm from "@/components/KsForm";
+import KsForm from "../../components/KsForm";
 export default {
-  name: 'pageThree',
+  name: '',
   components: {KsForm},
+  props: {},
   data() {
-    return {
-      formData: {},
-      formConfig: [
-        {prop: 'name', label: 'label', componentName: 'elInput'},
-        {prop: 'table', label: 'table', componentName: 'table',isSlot:true}
-      ]
-    }
+  return {
+    visible:false,
+    formConfig:
+        [
+          {label:'姓名姓名姓',prop:'name',type:'el-input'},
+          {label:'姓名',prop:'avv',type:'el-button',},
+          {label:'姓名',prop:'hhh',type:'el-input'},
+          {label:'姓名',prop:'gggg',type:'el-input'},
+          {label:'姓名',prop:'fff',type:'el-input'},
+          {label:'姓名',prop:'ccc',type:'el-input'},
+          {label:'姓名',prop:'saa',type:'el-input'},
+          {label:'姓名',prop:'ccc54',type:'el-input'},
+        ],
+    buttonConfig:
+        [
+          {label:'提交',prop:'submit',type:'primary'}
+        ],
+    formData: {}
+  }
   },
-  methods: {}
+  computed: {},
+  watch: {},
+  created() {
+
+  },
+  mounted() {},
+  updated() {},
+  activated() {},
+  deactivated() {},
+  beforeDestroy() {},
+  destroyed() {},
+  methods: {
+
+  }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang='scss' scoped>
+
 </style>
