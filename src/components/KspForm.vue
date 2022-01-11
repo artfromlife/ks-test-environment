@@ -19,7 +19,7 @@
                       v-model="model[cfg.prop]"
                       clearable>
                     <el-option
-                        v-for="option in cfg.options"
+                        v-for="option in dict[cfg.dict]"
                         :key="option.value"
                         :value="option.value"
                         :label="option.label"
@@ -133,6 +133,10 @@ export default {
       const Mapper = {}
       this.formConfig.forEach( c => Mapper[c.prop] = c)
       return Mapper
+    },
+    dict(){
+      console.count("123")
+      return this.$store.state.dict
     }
   },
   watch: {},

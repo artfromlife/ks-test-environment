@@ -10,7 +10,9 @@
         <el-button
             v-for="button in buttonConfig"
             :key="button.prop"
-            @click="$emit('buttonClick',button.prop)">
+            v-on="typeof button.listeners === 'function' ? button.listeners(button):button.listeners"
+            v-bind="button"
+        >
           {{ button.label }}
         </el-button>
       </el-button-group>
@@ -48,7 +50,17 @@ export default {
   },
   destroyed() {
   },
-  methods: {}
+  methods: {
+    enhancer(button) {
+      console.log(Object.keys(button.listeners))
+      if (button.listeners) {
+        Object.keys(button.listeners).forEach(k => {
+          button.listeners[k] = button.listeners[k].bind(this, button)
+        })
+      }
+      return button.listeners
+    }
+  }
 }
 </script>
 
