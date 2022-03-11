@@ -1,15 +1,14 @@
 <template>
   <div class="container">
-    <div class="box">7777</div>
-    <A/>
+    template
+    <div class="box">123</div>
   </div>
 </template>
 
 <script>
-import A from "@/views/pageSix/A";
 export default {
-  name: 'pageSix',
-  components: {A},
+  name: 'A',
+  components: {},
   props: {},
   data() {
   return {}
@@ -31,11 +30,9 @@ export default {
 
 <style lang='scss' scoped>
 .container{
-  height: 100%;
-  width: 100%;
-  background-color: pink;
-  ::v-deep .box{
-    background-color: red;
+  background-color: black;
+  .box{
+    background-color: #fff;
   }
 }
 </style>

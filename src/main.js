@@ -9,15 +9,17 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import './styles/main.css'
 Vue.use(ElementUI, {size: 'medium', zIndex: 3000})
-
+import adaptive from "@/directives/el-table/index.js";
+Vue.use(adaptive)
 const requireComponent = require.context('./components',false, /\w+.(vue|js)$/)
 requireComponent.keys().forEach(fileName => {
   const componentConfig = requireComponent(fileName)
   Vue.component(fileName.split('/').pop().replace(/\.\w+$/,''),componentConfig.default)
 })
 
-Vue.config.productionTip = false
 
+Vue.config.productionTip = false
+console.log('???',Vue.config.optionMergeStrategies)
 new Vue({
   router,
   store,
